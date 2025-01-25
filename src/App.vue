@@ -1,47 +1,78 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+  import { reactive } from 'vue';
+  import Cabecalho from './components/Cabecalho.vue';
+  import Formulario from './components/Formulario.vue';
+  import Rodape from './components/Rodape.vue';
+
+  const estado = reactive({
+    numero1: 0,
+    numero2: 0,
+    resultado: 0,
+    operador: 'somar',
+  })
+
+  function getNumber1(evento) {
+    estado.numero1 = evento.target.value;
+    if (estado.numero1 == '')  {
+      estado.numero1 = 0;
+    }
+    estado.numero1 = parseFloat(estado.numero1)
+    getOperacao();
+  }
+
+  function getNumber2(evento) {
+    estado.numero2 = evento.target.value;
+    if (estado.numero2 == '')  {
+      estado.numero2 = 0;
+    }
+    estado.numero2 = parseFloat(estado.numero2)
+    getOperacao();
+  }
+
+  function getOperador(evento) {
+    estado.operador = evento.target.value;
+    getOperacao();
+  }
+
+  const getOperacao = () => {
+    switch(estado.operador) {
+      case 'subtrair':
+        return estado.resultado = (estado.numero1 - estado.numero2);
+      case 'somar':
+        return estado.resultado = (estado.numero1 + estado.numero2);
+      case 'dividir':
+        if (estado.numero2 == 0) {
+          return estado.resultado = "Não é possível dividir por 0";
+        }
+        return estado.resultado = (estado.numero1 / estado.numero2);
+      case 'multiplicar':
+        return estado.resultado = (estado.numero1 * estado.numero2);
+    }
+  }
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <div class="container">
+      <Cabecalho />
+      <Formulario 
+        :get-Number-1="getNumber1"
+        :get-Number-2="getNumber2"
+        :resultado="estado.resultado"
+        :get-Operador="getOperador"
+      />
+      <Rodape />  
+      
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+  .container {
+    max-width: 640px;
+    width: 100%;
+    color: #b8b8b8;
+    border-color: black;
   }
-
-  .logo {
-    margin: 0 2rem 0 0;
+  template {
+    background-color: darkcyan;
   }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
